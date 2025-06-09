@@ -13,7 +13,7 @@ Install-Module -Name PSGitHub
 $release = Get-GitHubRelease -Owner nix-community -Repository NixOS-WSL
 $version = $release.tag_name.Split(" ")[0]
 Write-Host "The latest release for NixOS-WSL is v$version"
-$nixOSWSLdownloadUrl = "https://github.com/nix-community/NixOS-WSL/releases/download/$version/nixos-wsl.tar.gz"
+$nixOSWSLdownloadUrl = "https://github.com/nix-community/NixOS-WSL/releases/download/$version/nixos.wsl"
 
 
 write-host "Updating WSL to the latest version."
@@ -53,11 +53,11 @@ if ($decision -eq 0) {
 
 write-host "Downloading NixOS."
 set-location ~
-Invoke-WebRequest $nixOSWSLdownloadUrl -OutFile nixos-wsl.tar.gz
+Invoke-WebRequest $nixOSWSLdownloadUrl -OutFile nixos.wsl
 
 write-host "Installing NixOS"
 New-item NixOS -Type Directory
-wsl --import NixOS .\NixOS\ .\nixos-wsl.tar.gz --version 2
+wsl --install --name NixOS-nyx --location NixOS --from-file .\nixos.wsl --version 2
 
 
 $question = 'Set NixOS as default?'
@@ -66,7 +66,7 @@ $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentL
 $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
 $decision = $Host.UI.PromptForChoice($title, $question, $choices, 0)
 if ($decision -eq 0) {
-    wsl --setdefault NixOS
+    wsl --setdefault NixOS-nyx
 } 
 
 $question = '
@@ -78,5 +78,5 @@ $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentL
 $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
 $decision = $Host.UI.PromptForChoice($title, $question, $choices, 0)
 if ($decision -eq 0) {
-    wsl -d NixOS
+    wsl -d NixOS-nyx
 } 

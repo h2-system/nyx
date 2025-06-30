@@ -57,7 +57,7 @@ Invoke-WebRequest $nixOSWSLdownloadUrl -OutFile nixos.wsl
 
 write-host "Installing NixOS"
 New-item NixOS -Type Directory
-wsl --install --name NixOS-nyx --location .\NixOS\ --from-file .\nixos.wsl --version 2
+wsl --install --name NixOS --location .\NixOS\ --from-file .\nixos.wsl --version 2
 
 
 $question = 'Set NixOS as default?'
